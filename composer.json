@@ -1,8 +1,8 @@
 {
     "name": "noodlehaus/config",
     "type": "library",
-    "description": "lightweight configuration file loader that supports PHP, INI, XML, JSON, and YAML files",
-    "keywords": ["configuration", "config", "json", "yaml", "ini", "xml", "unframework", "microphp"],
+    "description": "lightweight configuration file loader & formatter that supports PHP, Ini, XML, JSON, YAML, Plist files and Array()",
+    "keywords": ["configuration", "config", "json", "yaml", "ini", "xml", "plist", "array", "unframework", "microphp"],
     "homepage": "http://noodlehaus.github.io/config/",
     "license": "MIT",
     "authors": [{
@@ -14,10 +14,17 @@
         "name": "Hassan Khan",
         "role": "Developer",
         "homepage": "http://hassankhan.me/"
-    }],
+    },
+    {
+        "name": "Vlad A. Koltsov",
+        "role": "Developer",
+        "homepage": "http://etconsilium.github.io/"
+    }
+    ],
     "require": {
-        "php": ">= 5.3.0",
-        "symfony/yaml": "~2.5"
+        "php": ">= 5.5.0",
+        "symfony/yaml": "~2.5",
+        "rodneyrehm/plist": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0"

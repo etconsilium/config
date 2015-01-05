@@ -6,6 +6,7 @@ use Noodlehaus\Exception\ParseException;
 use Noodlehaus\Exception\FileNotFoundException;
 use Noodlehaus\Exception\UnsupportedFormatException;
 use \Symfony\Component\Yaml\Yaml;
+use \CFPropertyList as Plist;
 
 /**
  * Config
@@ -13,10 +14,11 @@ use \Symfony\Component\Yaml\Yaml;
  * @package    Config
  * @author     Jesus A. Domingo <jesus.domingo@gmail.com>
  * @author     Hassan Khan <contact@hassankhan.me>
+ * @author     Vlad A. Koltsov <v.koltsov@gmail.com>
  * @link       https://github.com/noodlehaus/config
  * @license    MIT
  */
-class Config implements \ArrayAccess
+class Config
 {
     /**
      * Stores the configuration data
@@ -33,28 +35,72 @@ class Config implements \ArrayAccess
     protected $cache = array();
 
     /**
+     * Realpath configuration file
+     *
+     * @var string
+     */
+    protected $filename = null;
+
+    /**
+     * Types: PHP, Ini, XML, JSON, YAML, Plist files and Array()
+     */
+    const ARR = 'Array';
+    const PHP = 'Php';
+    const INI = 'Ini';
+    const XML = 'Xml';
+    const YAML = 'Yaml';
+    const PLST = 'Plist';
+    const CVS = 'Cvs';
+
+    protected $ext_list = [
+        self::ARR => []
+        ,self::CVS => ['cvs','txt','']
+        ,self::INI => ['ini','init']
+        ,self::PHP => ['php','inc']
+        ,self::PLST => []   //  ?
+        ,self::XML => ['xml']
+        ,self::YAML => ['yml','yaml']
+    ];
+
+
+    /**
     * Static method for loading a config instance.
     *
-    * @param  string $path
+    * @param  string|array $param
+    * @param  string $type
     *
     * @return Config
     */
-    public static function load($path)
+    public static function load($param, $type=null)
     {
         return new static($path);
     }
 
     /**
+     * Save the current configuration data into file
+     *
+     * @param type $filename
+     * @param  string $type
+     *
+     * @return void
+     */
+    public function save($filename, $type=null)
+    {
+        return ;
+    }
+
+    /**
     * Loads a supported configuration file format.
     *
-    * @param  string $path
+    * @param  string|array $param filename or array data or string data
+    * @param  string $type
     *
     * @return void
     *
     * @throws FileNotFoundException      If a file is not found at `$path`
     * @throws UnsupportedFormatException If `$path` is an unsupported file format
     */
-    public function __construct($path)
+    public function __construct($param, $type=null)
     {
         // Get file information
         $info = pathinfo($path);
@@ -146,7 +192,7 @@ class Config implements \ArrayAccess
     protected function loadJson($path)
     {
         $data = json_decode(file_get_contents($path), true);
-        
+
         if (function_exists('json_last_error_msg')) {
             $error_message = json_last_error_msg();
         } else {
